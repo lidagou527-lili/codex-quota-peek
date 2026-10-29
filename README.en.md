@@ -8,6 +8,7 @@ A quiet Windows quota overlay that appears only while you work in Codex · Unoff
 
 [![Release](https://img.shields.io/github/v/release/lidagou527-lili/codex-quota-peek?include_prereleases&label=download&color=f5c542)](https://github.com/lidagou527-lili/codex-quota-peek/releases)
 [![Platform](https://img.shields.io/badge/Windows-10%20%2F%2011%20x64-0078d4)](#-get-started-in-3-steps)
+[![Tests](https://github.com/lidagou527-lili/codex-quota-peek/actions/workflows/ci.yml/badge.svg)](https://github.com/lidagou527-lili/codex-quota-peek/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/lidagou527-lili/codex-quota-peek?color=4c9be8)](LICENSE)
 
 [中文](README.md) · [Download](https://github.com/lidagou527-lili/codex-quota-peek/releases) · [Privacy](PRIVACY.md) · [Test coverage](docs/TESTING.md) · [Changelog](CHANGELOG.md)

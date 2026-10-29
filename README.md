@@ -8,6 +8,7 @@
 
 [![Release](https://img.shields.io/github/v/release/lidagou527-lili/codex-quota-peek?include_prereleases&label=%E4%B8%8B%E8%BD%BD&color=f5c542)](https://github.com/lidagou527-lili/codex-quota-peek/releases)
 [![Platform](https://img.shields.io/badge/Windows-10%20%2F%2011%20x64-0078d4)](#-3-步上手)
+[![Tests](https://github.com/lidagou527-lili/codex-quota-peek/actions/workflows/ci.yml/badge.svg)](https://github.com/lidagou527-lili/codex-quota-peek/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/lidagou527-lili/codex-quota-peek?color=4c9be8)](LICENSE)
 
 [English](README.en.md) · [下载](https://github.com/lidagou527-lili/codex-quota-peek/releases) · [隐私说明](PRIVACY.md) · [测试范围](docs/TESTING.md) · [版本记录](CHANGELOG.md)
