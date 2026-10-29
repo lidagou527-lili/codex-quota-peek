@@ -13,9 +13,9 @@
 
 [English](README.en.md) · [下载](https://github.com/lidagou527-lili/codex-quota-peek/releases) · [隐私说明](PRIVACY.md) · [测试范围](docs/TESTING.md) · [版本记录](CHANGELOG.md)
 
-<img src="docs/preview.png" alt="界面示意，使用合成数据" width="560">
+<img src="docs/demo.zh.gif" alt="演示：Codex 在前台时小条出现，切到其他软件时自动隐藏" width="680">
 
-<sub>截图使用合成数据，不代表任何真实账户</sub>
+<sub>演示动画使用合成数据，不代表任何真实账户</sub>
 
 </div>
 

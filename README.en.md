@@ -13,9 +13,9 @@ A quiet Windows quota overlay that appears only while you work in Codex · Unoff
 
 [中文](README.md) · [Download](https://github.com/lidagou527-lili/codex-quota-peek/releases) · [Privacy](PRIVACY.md) · [Test coverage](docs/TESTING.md) · [Changelog](CHANGELOG.md)
 
-<img src="docs/preview.png" alt="Synthetic demonstration, not live account data" width="560">
+<img src="docs/demo.en.gif" alt="Demo: the bar appears while Codex is in front and hides when you switch away" width="680">
 
-<sub>Screenshot uses synthetic data, not a real account</sub>
+<sub>Demo animation uses synthetic data, not a real account</sub>
 
 </div>
 
