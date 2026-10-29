@@ -1,0 +1,17 @@
+dist/
+runtime/
+node_modules/
+*.log
+*.tmp
+*.pid
+*.lock
+snapshot.json
+ledger.json
+status.json
+visibility.json
+window.json
+settings.json
+auth.json
+.env*
+Thumbs.db
+desktop.ini

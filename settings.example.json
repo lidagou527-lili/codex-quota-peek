@@ -1,0 +1,9 @@
+{
+  "codexPath": "",
+  "foregroundSeconds": 15,
+  "backgroundSeconds": 60,
+  "reservePercent": 10,
+  "timeZone": "local",
+  "showMode": "codex",
+  "language": "auto"
+}
