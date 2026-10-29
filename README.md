@@ -1,80 +1,173 @@
+<div align="center">
+
 # Codex Quota Peek
 
-**只在你使用 Codex 时出现的 Windows 额度小条。非官方工具。**
+**写代码时瞄一眼，就知道 Codex 额度还剩多少、今天还能放心用多少。**
 
-[English](README.en.md) · [隐私说明](PRIVACY.md) · [测试范围](docs/TESTING.md) · [版本记录](CHANGELOG.md)
+只在你使用 Codex 时出现的 Windows 额度小条 · 非官方工具
 
-![界面示意，使用合成数据](docs/preview.png)
+[![Release](https://img.shields.io/github/v/release/lidagou527-lili/codex-quota-peek?include_prereleases&label=%E4%B8%8B%E8%BD%BD&color=f5c542)](https://github.com/lidagou527-lili/codex-quota-peek/releases)
+[![Platform](https://img.shields.io/badge/Windows-10%20%2F%2011%20x64-0078d4)](#-3-步上手)
+[![License](https://img.shields.io/github/license/lidagou527-lili/codex-quota-peek?color=4c9be8)](LICENSE)
 
-黄色表示短时和每周的**实际剩余额度**，蓝色表示**今天监测后的周额度消耗**。切到其他软件自动隐藏，切回 Codex 自动显示；隐藏期间仍会更新。截图使用合成数据，不代表任何真实账户。
+[English](README.en.md) · [下载](https://github.com/lidagou527-lili/codex-quota-peek/releases) · [隐私说明](PRIVACY.md) · [测试范围](docs/TESTING.md) · [版本记录](CHANGELOG.md)
 
-## 下载与启动
+<img src="docs/preview.png" alt="界面示意，使用合成数据" width="560">
 
-在本仓库 **Releases** 下载 `codex-quota-peek-0.1.0-alpha.1-win-x64.zip`。解压到你自己的文件夹，双击 `Launch.cmd`。**不要在ZIP内直接运行。** 便携包包含 Node.js，无需另外安装 Node。
+<sub>截图使用合成数据，不代表任何真实账户</sub>
 
-前提：Windows 10/11 x64、Windows PowerShell 5.1，以及已经安装并通过 ChatGPT 订阅登录的 Codex。当前仅在 Windows 11 x64 的一台电脑上验证，Windows 10 与其他套餐仍需社区测试。不是浏览器扩展，也不是官方商店插件。不支持 macOS、Linux 或直接API计费余额。
+</div>
 
-开始运行后，系统托盘出现入口，可切换“仅Codex显示/始终显示”、打开设置、查看连接状态及退出。小条可拖动，会保存位置，右上角 `×` 会退出。默认不会开机自启，也不会替你安装、登录或修改 Codex。下次使用时再次运行 `Launch.cmd`。
+---
 
-下载的源码不包含Node运行环境。开发者可安装 Node.js 22+ 后运行 `Launch.cmd`；如果企业策略禁止PowerShell脚本，请遵循管理员策略，不要关闭安全防护。Alpha发行包尚未代码签名。
+## 为什么需要它
 
-## 怎么看
+| 以前 | 用了之后 |
+| --- | --- |
+| 想看额度得翻到设置页，看完又忘了 | 切到 Codex，小条自动出现在屏幕角落 |
+| 只知道“周额度剩 66%”，不知道今天该用多少 | 自动算出**今天的建议用量**和**还剩多少** |
+| 周中前几天用太猛，周末没额度可用 | 按剩余天数均摊，默认留 10% 余量 |
+| 担心第三方工具碰到账号密码 | 只读查询，复用 Codex 自己的登录，不要密码、Cookie 或 API Key |
 
-- `5h`：实际短时额度。以接口返回的时长为准，其他时长显示对应标签。
-- `Week`：实际周剩余额度；套餐未返回时显示 `--`。
-- 蓝字 `Today: 6pp used · 5.8pp suggested left`：今天监测后消耗了整周额度的6个百分点，还建议消耗5.8个百分点。**pp不是短时额度的百分比，也不是token数或聊天次数。**
-- 底部显示最后成功查询时间及短时重置倒计时。查询失败保留余额、蓝条和统计，不会把旧记录变成0。
+## ✨ 特性
 
-界面语言默认跟随Windows；可将设置中的 `language` 改为 `zh` 或 `en`。中文蓝字显示“今日已用周 X% · 还建议用周 X%”，其中 `%` 同样指整周额度百分点。
+- 🟨 **真实余额**：黄色进度条显示 `5h` 短时额度和 `Week` 周额度，数据来自 Codex 本身。
+- 🟦 **今日预算**：蓝色显示今天已用了多少周额度，以及还建议用多少。
+- 👀 **不打扰**：只在 Codex 处于前台时显示，切走自动隐藏，后台照常更新。
+- 🖱️ **随手可调**：可拖动并记住位置；托盘菜单切换“仅 Codex 显示 / 始终显示”。
+- 🔒 **本地优先**：数据只存在本机，没有统计、遥测或上传服务。
+- 📦 **开箱即用**：便携 ZIP 自带 Node.js，解压双击即可运行，无需安装。
+- 🌏 **中英双语**：默认跟随 Windows 语言。
 
-## 每日建议如何计算
+## 🚀 3 步上手
 
-每天第一次有效采样时固定建议总量：
+> **前提**：Windows 10/11 x64，已安装 Codex 并用 ChatGPT 订阅登录。
 
-`周剩余额度 ÷ max(距周重置的剩余天数, 1) × (1 − 预留比例)`
+1. 从 [Releases](https://github.com/lidagou527-lili/codex-quota-peek/releases) 下载 `codex-quota-peek-0.1.0-alpha.1-win-x64.zip`。
+2. **解压**到任意文件夹（不要在 ZIP 里直接运行）。
+3. 双击 `Launch.cmd`，然后切到 Codex。
 
-默认预留10%。例如周剩70%、距重置5天，当日建议消耗12.6个周额度百分点；监测后消耗5点，则还建议用7.6点。**这是均摊规划，不是官方每日限额，也不保证一定可工作多久。** 默认按每天均衡使用分配，不区分工作日和周末。
+右上角 `×` 或托盘菜单可以退出。程序不会开机自启，下次用时再双击 `Launch.cmd` 即可。
 
-“今日”使用本地日历日，从当天首次采样开始统计，无法追溯启动前的消耗。每个账户独立存储。同日额度重置会保留此前消耗，并从新额度重新分配剩余建议；蓝段只绘制当前额度周期内的今日消耗。鼠标悬停可查看统计起点。
+## 📊 怎么看这个小条
 
-## 设置与数据
+```text
+5h    ██████████░░░░░░  58%    ← 短时额度实际剩余
+Week  ███████████▒░░░░  66%    ← 周额度实际剩余（▒ 蓝段 = 今天用掉的部分）
+Today: 6pp used · 5.8pp suggested left
+       └ 今天已用整周额度的 6 个百分点，还建议再用 5.8 个
+```
 
-设置、用量与状态位于 `%LOCALAPPDATA%\CodexQuotaPeek`，不写入程序安装目录。托盘菜单可打开设置，修改后自动读取。有效设置示例见 [settings.example.json](settings.example.json)。
+- **pp = 整周额度的百分点**，不是短时额度的百分比，也不是 token 数或对话次数。
+- 底部显示最后一次成功查询的时间和短时额度重置倒计时。
+- 查询失败时保留上次的数据，不会把额度显示成 0。
 
-- `codexPath`：找不到Codex时填写实际的 `codex.exe` 完整路径，JSON反斜杠需写成 `\\`。自动检测首先找Codex桌面端安装的引擎，其次找PATH中的 `codex.exe`。
-- `foregroundSeconds` / `backgroundSeconds`：前台/后台查询间隔，默认15/60秒，最少15秒。失败会指数退避，最多5分钟；不是逐token实时更新。
-- `reservePercent`：0–90，默认10；每日预算建立后固定，改预留比例主要影响下一天或下一额度周期。
-- `timeZone`：`local` 或有效IANA时区，如 `Asia/Shanghai`，用于每日统计；重置倒计时、界面时间使用Windows本地时间。
-- `showMode`：`codex` 或 `always`；仅Codex模式通过前台进程的产品元数据识别官方桌面窗口。
+### 今日建议怎么算
 
-查看 `status.json` 可获取连接错误。程序不会要求你把密码、Cookie、API Key或原始登录文件粘贴进设置。额度通过Codex的 `app-server` 只读查询，沿用Codex已有登录。
+每天第一次取得有效数据时固定当天的建议总量：
 
-## 已知限制
+```text
+今日建议 = 周剩余额度 ÷ max(距周重置天数, 1) × (1 − 预留比例)
+```
 
-- Alpha，不同安装方式、套餐、显示缩放和多屏尚未全部验证；没有官方兼容承诺。
-- 依赖Codex App Server协议和本机已有登录；协议或安装位置变化可能需要更新。没有周额度或重置时间时，日预算不可用，短时额度仍可显示。
-- 账户标识不可用时停止合并统计；不同账户的本地指纹与日记录分离。同日中断监测、重置时遗漏的消耗无法完全补算。
-- 旧数据会保留，底部明确显示重试；网络恢复后按退避间隔重连。登录失效时请自行到Codex重新登录。
-- 历史账本损坏时从新基线恢复，不能保证修复损坏前的完整统计。日预算仅保留最近14天账目。
-- 没有自动升级、开机启动、Claude或豆包采集。本版本暂不展示工作时长预测。
+> **举例**：周额度剩 70%，距重置 5 天，预留 10% → 今天建议用 **12.6** 个百分点；已经用了 5 个 → **还能用 7.6** 个。
 
-退出并删除解压文件夹即可卸载；若想清除个人用量和设置，再自行删除 `%LOCALAPPDATA%\CodexQuotaPeek`。删除本工具数据不会退出Codex账户。
+这是均摊规划，**不是官方每日上限**。每天按同样的比例分配，不区分工作日和周末。
 
-## 开发与验证
+## ⚙️ 设置
+
+托盘菜单 → 打开设置。修改后会自动生效。所有数据都在 `%LOCALAPPDATA%\CodexQuotaPeek`。
+
+| 设置项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `showMode` | `codex` | `codex` = 只在 Codex 前台时显示；`always` = 一直显示 |
+| `reservePercent` | `10` | 预留比例，可设 0–90 |
+| `foregroundSeconds` / `backgroundSeconds` | `15` / `60` | 查询间隔（秒），最少 15；失败后最多退避到 5 分钟 |
+| `language` | `auto` | `auto` / `zh` / `en` |
+| `timeZone` | `local` | 计算“今天”用的时区，也可以填 `Asia/Shanghai` 这类时区名 |
+| `codexPath` | 空 | 自动找不到 Codex 时，填 `codex.exe` 的完整路径（反斜杠写成 `\\`） |
+
+完整示例见 [settings.example.json](settings.example.json)。
+
+## 🔒 隐私
+
+- 通过 Codex 自带的 `app-server` **只读**查询账户额度，沿用 Codex 已有的登录。
+- 不要求、也不保存密码、Cookie、API Key 或邮箱。账户只在本地生成加盐指纹，用来区分不同账户。
+- 没有遥测、广告或上传服务。详见 [PRIVACY.md](PRIVACY.md)。
+
+## ❓ 常见问题
+
+<details>
+<summary><b>小条没有出现？</b></summary>
+
+先确认 Codex 窗口在前台；或者在托盘菜单里切到“始终显示”。连接错误会记录在 `%LOCALAPPDATA%\CodexQuotaPeek\status.json`。
+</details>
+
+<details>
+<summary><b>提示找不到 Codex？</b></summary>
+
+程序会先找 Codex 桌面端自带的引擎，再找 PATH 中的 `codex.exe`。都找不到时，请在设置里填写 `codexPath`。
+</details>
+
+<details>
+<summary><b>“今日已用”为什么比实际少？</b></summary>
+
+统计从当天第一次采样开始，无法追溯启动之前的消耗。
+</details>
+
+<details>
+<summary><b>Week 显示 <code>--</code>？</b></summary>
+
+你的套餐没有返回周额度。这时短时额度仍然可以显示，但今日建议不可用。
+</details>
+
+<details>
+<summary><b>同一天里额度被重置了怎么办？</b></summary>
+
+此前的消耗会保留，并按新的额度重新分配剩余建议。蓝段只画当前额度周期内的消耗。
+</details>
+
+<details>
+<summary><b>怎么卸载？</b></summary>
+
+退出后删除解压出来的文件夹即可。如果想清除用量记录，再删除 `%LOCALAPPDATA%\CodexQuotaPeek`。这不会让你退出 Codex 登录。
+</details>
+
+## ⚠️ Alpha 版说明
+
+目前只在一台 Windows 11 x64 电脑上验证过。Windows 10、其他套餐、多显示器和高 DPI 缩放还需要更多人测试。发行包**尚未代码签名**；如果公司策略禁止运行 PowerShell 脚本，请遵守管理员的设置。
+
+- 依赖 Codex App Server 协议，协议或安装位置变化后可能需要更新本工具。
+- 本地账本只保留最近 14 天；账本损坏时会从新的基线重新开始统计。
+- 暂不支持：自动更新、开机自启、macOS / Linux、API 计费余额。
+
+完整的测试清单见 [docs/TESTING.md](docs/TESTING.md)。欢迎帮忙测试 🙌
+
+## 🛠️ 开发
+
+需要 Node.js 22+。
 
 ```powershell
-npm test
-npm run check
+npm test                    # 22 个单元测试
+npm run check               # 语法检查
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-windows.ps1
+# 真实连接本机 Codex 查询一次（会生成独立的测试数据）
 powershell -NoProfile -ExecutionPolicy Bypass -STA -File Start.ps1 -Check -DataDirectory "$env:TEMP\quota-peek-check"
 ```
 
-最后一条会实际连接本机Codex并生成独立测试数据；不要让两个进程使用同一数据目录。生成合成数据截图：`Start.ps1 -PreviewPath docs/preview.png`。构建便携包：`scripts/build.ps1`，将从nodejs.org下载Node 24 LTS并校验官方SHA256。构建产物位于 `dist/`。
+- 生成合成数据截图：`Start.ps1 -PreviewPath docs/preview.png`
+- 构建便携包：`scripts/build.ps1`。它会从 nodejs.org 下载 Node 24 LTS 并校验官方 SHA256，产物在 `dist/`。
 
-欢迎提交Issue，说明Windows版本、Codex版本、安装方式、复现步骤和脱敏后的连接错误。请不要上传auth.json、token、邮箱或完整个人账本。
+## 🤝 反馈
+
+欢迎[提交 Issue](https://github.com/lidagou527-lili/codex-quota-peek/issues)。请写明 Windows 版本、Codex 版本、安装方式、复现步骤，以及脱敏后的错误信息。
+
+> ⚠️ 请不要上传 `auth.json`、token、邮箱或完整的个人账本。
 
 ## 致谢与许可
 
-使用 [Codex App Server](https://developers.openai.com/codex/app-server) 查询账户额度。感谢同类开源工具对额度可视化方向的探索；本项目不宣称首创。
+通过 [Codex App Server](https://developers.openai.com/codex/app-server) 查询账户额度。感谢同类开源工具在额度可视化方向上的探索；本项目不宣称首创。
 
-作者：**lidagou527-lili**。本项目代码采用 [MIT](LICENSE) 许可。Codex、OpenAI为其各自权利人的名称；本项目未获OpenAI官方背书。便携包中的Node.js及其依赖许可见 [第三方说明](THIRD-PARTY-NOTICES.md)。
+作者 **[lidagou527-lili](https://github.com/lidagou527-lili)** · 代码采用 [MIT](LICENSE) 许可 · 便携包中 Node.js 的许可见[第三方说明](THIRD-PARTY-NOTICES.md)
+
+<sub>Codex、OpenAI 是其各自权利人的名称。本项目与 OpenAI 无关，也未获其官方背书。</sub>
